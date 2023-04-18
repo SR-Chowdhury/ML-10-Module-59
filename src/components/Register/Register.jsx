@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import app from '../../Firebase/Firebase.config';
 
 const Register = () => {
+
+    const auth = getAuth(app);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,6 +17,13 @@ const Register = () => {
         // console.log(email, password)
         // setEmail(email);
         // setPassword(password);
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then( result => {
+                const loggedInUser = result.user;
+                console.log(loggedInUser);
+            })
+            .catch(err => console.error(err))
     }
 
     return (
