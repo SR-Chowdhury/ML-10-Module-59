@@ -6,24 +6,32 @@ const Register = () => {
 
     const auth = getAuth(app);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [success, setSuccess] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = (event) => {
 
         event.preventDefault();
+        setSuccess('');
+        setError('');
+
         const email = event.target.email.value;
         const password = event.target.password.value;
-        // console.log(email, password)
-        // setEmail(email);
-        // setPassword(password);
+
+        // Password Validation with regular expression
+        const regularExpression = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        if (!regularExpression.test(password)) {
+            setError('Password has at least one number, one special charecter etc');
+            return;
+        }
 
         createUserWithEmailAndPassword(auth, email, password)
             .then( result => {
                 const loggedInUser = result.user;
                 console.log(loggedInUser);
+                setSuccess('User has been created successfully!');
             })
-            .catch(err => console.error(err))
+            .catch(err => setError(err.message))
     }
 
     return (
@@ -31,10 +39,12 @@ const Register = () => {
             <h1 className='my-5'>This is Register Page</h1>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <input className='form-control' type="email" id='email' placeholder='Enter Your email' />
-                    <input className='form-control my-3' type="password" id='password' placeholder='******' />
-                    <input className='form-control bg-info' type="submit" value="Register" />
+                    <input className='form-control' required type="email" id='email' placeholder='Enter Your email' />
+                    <input className='form-control my-3' required type="password" id='password' placeholder='******' />
+                    <input className='form-control bg-info mb-3' type="submit" value="Register" />
                 </form>
+                <p className='text-success'>{success}</p>
+                <p className='text-danger'>{error}</p>
             </div>
         </div>
     );
