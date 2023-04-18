@@ -19,7 +19,7 @@ const Register = () => {
         const password = event.target.password.value;
 
         // Password Validation with regular expression
-        const regularExpression = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        const regularExpression = /^(?=.*[0-9])[a-zA-Z0-9]/;
         if (!regularExpression.test(password)) {
             setError('Password has at least one number, one special charecter etc');
             return;
@@ -28,7 +28,8 @@ const Register = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then( result => {
                 const loggedInUser = result.user;
-                console.log(loggedInUser);
+                // console.log(loggedInUser);
+                event.target.reset();
                 setSuccess('User has been created successfully!');
             })
             .catch(err => setError(err.message))
