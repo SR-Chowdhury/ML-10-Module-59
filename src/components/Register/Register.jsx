@@ -37,7 +37,7 @@ const Register = () => {
 
     return (
         <div>
-            <h1 className='my-5'>This is Register Page</h1>
+            <h1 className='my-5'>-- Register --</h1>
             <div>
                 <form onSubmit={handleSubmit}>
                     <input className='form-control' required type="email" id='email' placeholder='Enter Your email' />
