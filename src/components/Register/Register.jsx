@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from "firebase/auth";
 import app from '../../Firebase/Firebase.config';
 import { Link } from 'react-router-dom';
 
-const Register = () => {
+const auth = getAuth(app);
 
-    const auth = getAuth(app);
+const Register = () => {
 
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
@@ -16,6 +16,7 @@ const Register = () => {
         setSuccess('');
         setError('');
 
+        const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
 
@@ -35,6 +36,7 @@ const Register = () => {
                 // console.log(loggedInUser);
                 event.target.reset();
                 emailVarification(loggedInUser);
+                updateUserProfile(loggedInUser, name);
                 setSuccess('User has been created successfully!');
             })
             .catch(err => setError(err.message))        
@@ -43,17 +45,28 @@ const Register = () => {
     const emailVarification = user => {
         sendEmailVerification(user)
             .then( result => {
-                console.log(result);
+                // console.log(result);
                 alert('Email verification sent!');
             })
             .catch(err => setError(err.message))
     }
+
+    const updateUserProfile = (user, name) => {
+        updateProfile(user, {
+            displayName: name
+        })
+            .then( result => {
+                alert('User name successfully updated!');
+            })
+            .catch(err => setError(err.message))
+    } 
 
     return (
         <div>
             <h1 className='my-5'>-- Register --</h1>
             <div>
                 <form onSubmit={handleSubmit}>
+                    <input className='form-control mb-3' name='name' required type="text" id='name' placeholder='Enter Your Name' />
                     <input className='form-control' required type="email" id='email' placeholder='Enter Your email' />
                     <input className='form-control my-3' required type="password" id='password' placeholder='******' />
                     <input className='form-control bg-info mb-3' type="submit" value="Register" />
