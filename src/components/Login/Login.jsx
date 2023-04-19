@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Link } from 'react-router-dom';
 
 const Login = () => {
 
@@ -32,7 +33,7 @@ const Login = () => {
             .then( result => {
                 const loggedInUser = result.user;
                 console.log(loggedInUser)
-                setSuccess('Successfully Loged In');
+                setSuccess('Successfully Logged In');
             })
             .catch(err => setError(err.message))
 
@@ -45,8 +46,9 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <input className='form-control' name='email' required type="email" id='email' placeholder='Enter Your email' />
                     <input className='form-control my-3' name='password' required type="password" id='password' placeholder='******' />
-                    <input className='form-control bg-info mb-3' type="submit" value="Register" />
+                    <input className='form-control bg-info mb-3' type="submit" value="Login" />
                 </form>
+                <p><small>New in this website? <Link to="/register">Register</Link></small></p>
                 <p className='text-success'>{success}</p>
                 <p className='text-danger'>{error}</p>
             </div>
